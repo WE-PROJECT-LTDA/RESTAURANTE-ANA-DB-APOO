@@ -1,32 +1,23 @@
 package Entidades;
-public class Cliente {
-     String nome;
-     int codigo;
-     int telefone;
 
-
-
-    public Cliente(String nome, int codigo, int telefone) {
+class Cliente {
+    private static int proximoId = 1;
+    private int id;
+    private String nome;
+    private String telefone;
+    public Cliente(String nome, String telefone) {
+        this.id = proximoId++;
         this.nome = nome;
-        this.codigo = codigo;
         this.telefone = telefone;
     }
-    public String getNome() {
-        return nome;
+    public int getId() { return id;
     }
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-    public int getCodigo() {
-        return codigo;
-    }
-    public void setCodigo(int codigo) {
-        this.codigo = codigo;
-    }
-    public int getTelefone() {
-        return telefone;
-    }
-    public void setTelefone(int telefone) {
-        this.telefone = telefone;
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
+    public String getTelefone() { return telefone; }
+    public void setTelefone(String telefone) { this.telefone = telefone; }
+    @Override
+    public String toString() {
+        return "Cliente{id=" + id + ", nome='" + nome + "', telefone='" + telefone + "'}";
     }
 }
