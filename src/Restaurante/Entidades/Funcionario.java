@@ -3,7 +3,7 @@ package Restaurante.Entidades;
 import java.util.ArrayList;
 import java.util.List;
 
-class Funcionario {
+public class Funcionario {
     private static int proximoId = 1;
     private int id;
     private String nome;

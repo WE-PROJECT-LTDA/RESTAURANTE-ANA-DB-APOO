@@ -106,17 +106,17 @@ public class Produto {
         }
 
         //Cardápio
-        public void inicializarProdutos() {
-            adicionar(new Produto("Pizza Margherita", 35.00, "Pizza com molho de tomate e queijo"));
-            adicionar(new Produto("Coxinha", 8.50, "Coxinha de frango desfiado"));
-            adicionar(new Produto("Refrigerante", 5.00, "Refrigerante de cola"));
-            adicionar(new Produto("Hambúrguer", 25.00, "Hambúrguer com queijo e bacon"));
-            adicionar(new Produto("Batata Frita", 12.00, "Porção de batata frita crocante"));
-            adicionar(new Produto("Salada Caesar", 18.50, "Salada com frango grelhado e molho Caesar"));
-            adicionar(new Produto("Suco Natural", 7.00, "Suco de laranja natural"));
-            adicionar(new Produto("Lasanha", 40.00, "Lasanha de carne com queijo"));
-            adicionar(new Produto("Espaguete", 30.00, "Espaguete ao molho de tomate"));
-            adicionar(new Produto("Sorvete", 10.00, "Sorvete de creme com calda de chocolate"));
-        }
+//        public void inicializarProdutos() {
+//            adicionar(new Produto("Pizza Margherita", 35.00, "Pizza com molho de tomate e queijo"));
+//            adicionar(new Produto("Coxinha", 8.50, "Coxinha de frango desfiado"));
+//            adicionar(new Produto("Refrigerante", 5.00, "Refrigerante de cola"));
+//            adicionar(new Produto("Hambúrguer", 25.00, "Hambúrguer com queijo e bacon"));
+//            adicionar(new Produto("Batata Frita", 12.00, "Porção de batata frita crocante"));
+//            adicionar(new Produto("Salada Caesar", 18.50, "Salada com frango grelhado e molho Caesar"));
+//            adicionar(new Produto("Suco Natural", 7.00, "Suco de laranja natural"));
+//            adicionar(new Produto("Lasanha", 40.00, "Lasanha de carne com queijo"));
+//            adicionar(new Produto("Espaguete", 30.00, "Espaguete ao molho de tomate"));
+//            adicionar(new Produto("Sorvete", 10.00, "Sorvete de creme com calda de chocolate"));
+//        }
     }
 }
