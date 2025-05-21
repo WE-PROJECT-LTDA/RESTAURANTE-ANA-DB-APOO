@@ -1,7 +1,6 @@
 package Restaurante.Infraestrutura;
 
 import java.sql.*;
-import java.util.function.Consumer;
 
 public class ConnectionFactory {
     private static final String URL = "jdbc:mysql://134.65.244.176:3306/projeto_ana_restaurante_nascy";
@@ -12,7 +11,7 @@ public class ConnectionFactory {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
-    public static void executeQuery(String sql, Consumer<ResultSet> consumer) {
+    public static void executeQuery(String sql, java.util.function.Consumer<ResultSet> consumer) {
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
@@ -34,5 +33,26 @@ public class ConnectionFactory {
             e.printStackTrace();
             return -1;
         }
+    }
+
+    // ✅ Novo método para exibir qualquer SELECT no terminal
+    public static void printQueryResults(String sql) {
+        executeQuery(sql, rs -> {
+            try {
+                ResultSetMetaData metaData = rs.getMetaData();
+                int columnCount = metaData.getColumnCount();
+
+                while (rs.next()) {
+                    for (int i = 1; i <= columnCount; i++) {
+                        String columnName = metaData.getColumnLabel(i);
+                        String value = rs.getString(i);
+                        System.out.printf("%s: %s  ", columnName, value);
+                    }
+                    System.out.println("\n\n\n\n");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

@@ -1,6 +1,12 @@
 package Restaurante.Repositorios;
 
 import Restaurante.Entidades.Cliente;
+import Restaurante.Infraestrutura.ConnectionFactory;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,4 +53,54 @@ public class RepoCliente  {
         }
         return false;
     }
+
+    public void inserirNoBanco(Cliente cliente) {
+        String sql = "INSERT INTO Cliente (nome, telefone, email) VALUES (?, ?, ?)";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, cliente.getNome());
+            pstmt.setString(2, cliente.getTelefone());
+            pstmt.setString(3, cliente.getEmail());
+
+            int linhasAfetadas = pstmt.executeUpdate();
+
+            if (linhasAfetadas > 0) {
+                // Adiciona também na lista local, opcional
+                clientes.add(cliente);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Cliente findById(int id) {
+        String sql = "SELECT * FROM Cliente WHERE CodCliente = ?";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, id);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    Cliente cliente = new Cliente(
+                            rs.getString("nome"),
+                            rs.getString("telefone"),
+                            rs.getString("email")
+                    );
+                    cliente.setId(rs.getInt("CodCliente"));
+                    return cliente;
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null; // Não achou cliente com o id
+    }
+
 }
