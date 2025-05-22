@@ -1,13 +1,15 @@
 package Restaurante.Servicos;
+import Restaurante.Entidades.StatusPedido;
+
 
 public class Pedido {
-    int idPedido;
-    int idCliente;
-    String dataPedido;
-    String statusPedido;
-    String descricaoPedido;
+    private int idPedido;
+    private int idCliente;
+    private String dataPedido;
+    private StatusPedido statusPedido; //Enum
+    private String descricaoPedido;
 
-    public Pedido(int idPedido, int idCliente, String dataPedido, String statusPedido, String desc) {
+    public Pedido(int idPedido, int idCliente, String dataPedido, StatusPedido statusPedido, String desc) {
         this.idPedido = idPedido;
         this.idCliente = idCliente;
         this.dataPedido = dataPedido;
@@ -39,11 +41,11 @@ public class Pedido {
         this.dataPedido = dataPedido;
     }
 
-    public String getStatusPedido() {
+    public StatusPedido getStatusPedido() {
         return statusPedido;
     }
 
-    public void setStatusPedido(String statusPedido) {
+    public void setStatusPedido(StatusPedido statusPedido) {
         this.statusPedido = statusPedido;
     }
 
@@ -54,5 +56,15 @@ public class Pedido {
     public void setDescricaoPedido(String descricaoPedido) {
         this.descricaoPedido = descricaoPedido;
     }
-}
 
+    @Override
+    public String toString() {
+        return "Pedido{" +
+                "idPedido=" + idPedido +
+                ", idCliente=" + idCliente +
+                ", dataPedido='" + dataPedido + '\'' +
+                ", statusPedido=" + statusPedido +
+                ", descricaoPedido='" + descricaoPedido + '\'' +
+                '}';
+    }
+}
