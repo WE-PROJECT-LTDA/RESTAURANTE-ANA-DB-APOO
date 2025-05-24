@@ -100,7 +100,7 @@ public class RepoCliente  {
             e.printStackTrace();
         }
 
-        return null; // Não achou cliente com o id
+        return null;
     }
 
 }
