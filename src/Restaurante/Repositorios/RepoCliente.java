@@ -113,8 +113,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RepoCliente {
+public class RepoCliente implements IRepository<Cliente> {
 
+    @Override
     public void adicionar(Cliente cliente) {
         String sql = "INSERT INTO Cliente (Nome, Telefone, Email) VALUES (?, ?, ?)";
         try (Connection conn = ConnectionFactory.getConnection();
@@ -128,6 +129,27 @@ public class RepoCliente {
         }
     }
 
+    public Cliente buscarUltimoInserido() {
+        String sql = "SELECT * FROM Cliente ORDER BY CodCliente DESC LIMIT 1";
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            if (rs.next()) {
+                return new Cliente(
+                        rs.getInt("CodCliente"),
+                        rs.getString("Nome"),
+                        rs.getString("Telefone"),
+                        rs.getString("Email")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
     public List<Cliente> listar() {
         List<Cliente> clientes = new ArrayList<>();
         String sql = "SELECT * FROM Cliente";
@@ -149,6 +171,7 @@ public class RepoCliente {
         return clientes;
     }
 
+    @Override
     public Cliente buscarPorId(int id) {
         String sql = "SELECT * FROM Cliente WHERE CodCliente = ?";
         try (Connection conn = ConnectionFactory.getConnection();
@@ -186,6 +209,7 @@ public class RepoCliente {
         }
     }
 
+    @Override
     public boolean remover(int id) {
         String sql = "DELETE FROM Cliente WHERE CodCliente = ?";
         try (Connection conn = ConnectionFactory.getConnection();

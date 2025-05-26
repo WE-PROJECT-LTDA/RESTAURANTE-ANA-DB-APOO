@@ -9,9 +9,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RepoFuncionario {
+public class RepoFuncionario implements IRepository<Funcionario> {
     List<Funcionario> funcionarios = new ArrayList<>();
 
+    @Override
     public void adicionar(Funcionario funcionario) {
         String sql = "INSERT INTO Funcionario (Nome, Cargo, Cpf) VALUES (?, ?, ?)";
         try (Connection conn = ConnectionFactory.getConnection();
@@ -25,6 +26,7 @@ public class RepoFuncionario {
         }
     }
 
+    @Override
     public List<Funcionario> listar() {
         String sql = "SELECT * FROM Funcionario";
         try (Connection conn = ConnectionFactory.getConnection();
@@ -35,13 +37,13 @@ public class RepoFuncionario {
                 Funcionario funcionario;
 
                 if ("Cozinha".equalsIgnoreCase(cargo)) {
-                    funcionario = new Cozinheiro(
+                    funcionario = new Funcionario(
                             rs.getInt("CodFuncionario"),
                             rs.getString("Nome"),
                             rs.getString("Cpf")
                     );
                 } else if ("Entrega".equalsIgnoreCase(cargo)) {
-                    funcionario = new Garcom(
+                    funcionario = new Funcionario(
                             rs.getInt("CodFuncionario"),
                             rs.getString("Nome"),
                             rs.getString("Cpf")
@@ -61,8 +63,9 @@ public class RepoFuncionario {
         return funcionarios;
     }
 
+    @Override
     public Funcionario buscarPorId(int id) {
-        String sql = "SELECT * FROM Funcionario WHERE IdFuncionario = ?";
+        String sql = "SELECT * FROM Funcionario WHERE CodFuncionario = ?";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
@@ -72,13 +75,13 @@ public class RepoFuncionario {
                     Funcionario funcionario;
 
                     if ("Cozinha".equalsIgnoreCase(cargo)) {
-                        funcionario = new Cozinheiro(
+                        funcionario = new Funcionario(
                                 rs.getInt("CodFuncionario"),
                                 rs.getString("Nome"),
                                 rs.getString("Cpf")
                         );
                     } else if ("Entrega".equalsIgnoreCase(cargo)) {
-                        funcionario = new Garcom(
+                        funcionario = new Funcionario(
                                 rs.getInt("CodFuncionario"),
                                 rs.getString("Nome"),
                                 rs.getString("Cpf")
@@ -115,6 +118,7 @@ public class RepoFuncionario {
         }
     }
 
+    @Override
     public boolean remover(int id) {
         String sql = "DELETE FROM Funcionario WHERE IdFuncionario = ?";
         try (Connection conn = ConnectionFactory.getConnection();

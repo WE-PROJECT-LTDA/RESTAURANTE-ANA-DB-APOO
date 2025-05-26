@@ -13,7 +13,9 @@ import Restaurante.Repositorios.RepoMesa;
 import Restaurante.Repositorios.RepoProduto;
 import Restaurante.Repositorios.RepoFuncionario;
 import Restaurante.Repositorios.RepoComanda;
+
 import java.util.Scanner;
+
 import Restaurante.Entidades.*;
 import Restaurante.Entidades.Heranças.Cozinheiro;
 import Restaurante.Entidades.Heranças.Garcom;
@@ -38,9 +40,8 @@ public class Main {
         repoMesa.adicionar(new Mesa(4)); // Mesa para 4 pessoas
         repoMesa.adicionar(new Mesa(2)); // Mesa para 2 pessoas
 
-        // Adicionando alguns funcionários no banco de dados
-        repoFuncionario.adicionar(new Funcionario("Maria", "Garçonete", "123.456.789-00"));
-        repoFuncionario.adicionar(new Funcionario("José", "Cozinheiro", "987.654.321-00"));
+        repoFuncionario.adicionar(new Funcionario("Maria", "Entrega", "12345678900"));
+        repoFuncionario.adicionar(new Funcionario("José", "Cozinha", "98765432100"));
 
         System.out.println("=== Bem-vindo ao Restaurante ===");
 
@@ -53,15 +54,13 @@ public class Main {
         System.out.print("Email: ");
         String emailCliente = scanner.nextLine();
         Cliente cliente = new Cliente(nomeCliente, telefoneCliente, emailCliente);
-        repoCliente.adicionar(cliente); // Adiciona cliente ao banco de dados
-        System.out.println("Cliente cadastrado com ID: " + cliente.getId());
+        repoCliente.adicionar(cliente);
+        cliente = repoCliente.buscarUltimoInserido();
 
         // Cliente escolhe mesa
         System.out.println("\nMesas disponíveis:");
-        for (Mesa mesa : repoMesa.listar()) {
-            System.out.println(mesa);
-        }
-        int idMesa = -1;
+        System.out.println(repoMesa.listar());
+        int idMesa = 0;
         while (true) {
             System.out.print("Escolha o ID da mesa para se sentar: ");
             if (scanner.hasNextInt()) {
@@ -81,7 +80,7 @@ public class Main {
         scanner.nextLine(); // limpar buffer
 
         // Criar comanda para o cliente e mesa
-        Comanda comanda = new Comanda(cliente.getId(), "Comanda do Cliente " + cliente.getNome(), idMesa, "Pedidos do cliente", 0.0);
+        Comanda comanda = new Comanda(cliente.getId(), idMesa, 0.0);
         repoComanda.adicionar(comanda); // Adiciona comanda ao banco de dados
         System.out.println("Comanda criada com ID: " + comanda.getId());
 
@@ -96,7 +95,7 @@ public class Main {
             int codigoProduto = -1;
             if (scanner.hasNextInt()) {
                 codigoProduto = scanner.nextInt();
-                Produto produtoEscolhido = repoProduto.buscarPorCodigo(codigoProduto);
+                Produto produtoEscolhido = repoProduto.buscarPorId(codigoProduto);
                 if (produtoEscolhido != null) {
                     // Atualiza valor da comanda
                     comanda.setValor(comanda.getValor() + produtoEscolhido.getPreco());
@@ -209,7 +208,7 @@ class Testeconexao {
                                 System.out.print("Código do produto: ");
                                 int codigo = sc.nextInt();
                                 sc.nextLine();
-                                Produto p = repoProduto.buscarPorCodigo(codigo);
+                                Produto p = repoProduto.buscarPorId(codigo);
                                 if (p == null) {
                                     System.out.println("❌ Produto com código " + codigo + " não encontrado.");
                                 } else {
@@ -220,7 +219,7 @@ class Testeconexao {
                                 System.out.print("ID do produto para atualizar: ");
                                 int idUpdate = sc.nextInt();
                                 sc.nextLine();
-                                Produto existente = repoProduto.buscarPorCodigo(idUpdate);
+                                Produto existente = repoProduto.buscarPorId(idUpdate);
                                 if (existente == null) {
                                     System.out.println("❌ Produto não encontrado.");
                                 } else {
@@ -381,7 +380,7 @@ class Testeconexao {
                                     int valor = sc.nextInt();
                                     sc.nextLine();
 
-                                    comanda.atualizar(idAtualizar, novoCliente,novaMesa, valor);
+                                    comanda.atualizar(idAtualizar, novoCliente, novaMesa, valor);
                                     System.out.println("✅ Comanda atualizada com sucesso!");
                                 } else {
                                     System.out.println("❌ Comanda não encontrada.");
@@ -568,7 +567,7 @@ class Testeconexao {
                                     if (novoCargoTipo == 1) {
                                         cargo = "Garçom";
                                     } else if (novoCargoTipo == 2) {
-                                        cargo= "Cozinheiro";
+                                        cargo = "Cozinheiro";
                                     } else {
                                         System.out.println("❌ Cargo inválido. Funcionário não atualizado.");
                                         break;
@@ -593,7 +592,6 @@ class Testeconexao {
                     break;
 
 
-
                 case 6:
                     System.out.println("Encerrando o sistema. Até logo!");
                     break;
@@ -603,5 +601,6 @@ class Testeconexao {
             }
         }
 
-    }}
+    }
+}
 

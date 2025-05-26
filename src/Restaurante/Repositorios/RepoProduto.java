@@ -7,8 +7,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RepoProduto {
+public class RepoProduto implements IRepository<Produto>{
 
+    @Override
     public void adicionar(Produto produto) {
         String sql = "INSERT INTO Produto (Nome, Preco, Descricao) VALUES (?, ?, ?)";
         try (Connection conn = ConnectionFactory.getConnection();
@@ -22,6 +23,7 @@ public class RepoProduto {
         }
     }
 
+    @Override
     public List<Produto> listar() {
         List<Produto> produtos = new ArrayList<>();
         String sql = "SELECT * FROM Produto";
@@ -43,7 +45,8 @@ public class RepoProduto {
         return produtos;
     }
 
-    public Produto buscarPorCodigo(int codigo) {
+    @Override
+    public Produto buscarPorId(int codigo) {
         String sql = "SELECT * FROM Produto WHERE CodProduto = ?";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -65,6 +68,7 @@ public class RepoProduto {
         return null;
     }
 
+    @Override
     public boolean atualizar(int codigo, String novoNome, double novoPreco, String novaDescricao) {
         String sql = "UPDATE Produto SET Nome = ?, Preco = ?, Descricao = ? WHERE CodProduto = ?";
         try (Connection conn = ConnectionFactory.getConnection();
@@ -80,6 +84,7 @@ public class RepoProduto {
         }
     }
 
+    @Override
     public boolean remover(int codigo) {
         String sql = "DELETE FROM Produto WHERE CodProduto = ?";
         try (Connection conn = ConnectionFactory.getConnection();

@@ -7,8 +7,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RepoMesa {
+public class RepoMesa implements IRepository<Mesa>{
 
+    @Override
     public void adicionar(Mesa mesa) {
         String sql = "INSERT INTO Mesa (Capacidade) VALUES (?)";
         try (Connection conn = ConnectionFactory.getConnection();
@@ -20,6 +21,7 @@ public class RepoMesa {
         }
     }
 
+    @Override
     public List<Mesa> listar() {
         List<Mesa> mesas = new ArrayList<>();
         String sql = "SELECT * FROM Mesa";
@@ -37,6 +39,7 @@ public class RepoMesa {
         return mesas;
     }
 
+    @Override
     public Mesa buscarPorId(int idMesa) {
         String sql = "SELECT * FROM Mesa WHERE CodMesa = ?";
         try (Connection conn = ConnectionFactory.getConnection();
@@ -67,6 +70,7 @@ public class RepoMesa {
         }
     }
 
+    @Override
     public boolean remover(int idMesa) {
         String sql = "DELETE FROM Mesa WHERE CodMesa = ?";
         try (Connection conn = ConnectionFactory.getConnection();
