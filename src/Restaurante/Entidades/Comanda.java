@@ -21,6 +21,9 @@ public class Comanda {
           this.valor = valor;
      }
 
+     public Comanda(int idCliente, String descricao, int idMesa, double valor) {
+     }
+
      public int getId() {
           return id;
      }
@@ -75,6 +78,9 @@ public class Comanda {
                   ", idMesa=" + idMesa +
                   ", valor=" + valor +
                   '}';
+     }
+
+     public void setId(int idComanda) {
      }
 
      //CRUD

@@ -1,55 +1,98 @@
 package Restaurante.Repositorios;
 
 import Restaurante.Entidades.Produto;
+import Restaurante.Infraestrutura.ConnectionFactory;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RepoProduto {
-    private List<Produto> produtos = new ArrayList<>();
-
 
     public void adicionar(Produto produto) {
-        produtos.add(produto);
+        String sql = "INSERT INTO Produto (Nome, Preco, Descricao) VALUES (?, ?, ?)";
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, produto.getNome());
+            pstmt.setDouble(2, produto.getPreco());
+            pstmt.setString(3, produto.getDescricao());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
-
 
     public List<Produto> listar() {
-        return new ArrayList<>(produtos);
+        List<Produto> produtos = new ArrayList<>();
+        String sql = "SELECT * FROM Produto";
+        try (Connection conn = ConnectionFactory.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                Produto produto = new Produto(
+                        rs.getString("Nome"),
+                        rs.getDouble("Preco"),
+                        rs.getString("Descricao")
+                );
+                produto.setCodigo(rs.getInt("Codigo"));
+                produtos.add(produto);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return produtos;
     }
 
-
     public Produto buscarPorCodigo(int codigo) {
-        for (Produto p : produtos) {
-            if (p.getCodigo() == codigo) {
-                return p;
+        String sql = "SELECT * FROM Produto WHERE Codigo = ?";
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, codigo);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    Produto produto = new Produto(
+                            rs.getString("Nome"),
+                            rs.getDouble("Preco"),
+                            rs.getString("Descricao")
+                    );
+                    produto.setCodigo(rs.getInt("Codigo"));
+                    return produto;
+                }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return null;
     }
 
-
-    public boolean atualizar(int codigo, String novaDescricao, double novoPreco, String novoNome) {
-        Produto produto = buscarPorCodigo(codigo);
-        if (produto != null) {
-            if (novaDescricao != null && !novaDescricao.trim().isEmpty()) produto.setDescricao(novaDescricao);
-            if (novoPreco >= 0) produto.setPreco(novoPreco);
-            if (novoNome != null && !novoNome.trim().isEmpty()) produto.setNome(novoNome);
-            return true;
+    public boolean atualizar(int codigo, String novoNome, double novoPreco, String novaDescricao) {
+        String sql = "UPDATE Produto SET Nome = ?, Preco = ?, Descricao = ? WHERE Codigo = ?";
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, novoNome);
+            pstmt.setDouble(2, novoPreco);
+            pstmt.setString(3, novaDescricao);
+            pstmt.setInt(4, codigo);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
-        return false;
     }
-
 
     public boolean remover(int codigo) {
-        Produto produto = buscarPorCodigo(codigo);
-        if (produto != null) {
-            produtos.remove(produto);
-            return true;
+        String sql = "DELETE FROM Produto WHERE Codigo = ?";
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, codigo);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
-        return false;
     }
 
-    //Cardápio
+
     public void inicializarProdutos() {
         adicionar(new Produto("Pizza Margherita", 35.00, "Pizza com molho de tomate e queijo"));
         adicionar(new Produto("Coxinha", 8.50, "Coxinha de frango desfiado"));
