@@ -68,7 +68,6 @@ public class RepoProduto implements IRepository<Produto>{
         return null;
     }
 
-    @Override
     public boolean atualizar(int codigo, String novoNome, double novoPreco, String novaDescricao) {
         String sql = "UPDATE Produto SET Nome = ?, Preco = ?, Descricao = ? WHERE CodProduto = ?";
         try (Connection conn = ConnectionFactory.getConnection();

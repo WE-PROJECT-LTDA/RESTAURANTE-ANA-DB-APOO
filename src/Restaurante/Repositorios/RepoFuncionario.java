@@ -38,13 +38,13 @@ public class RepoFuncionario implements IRepository<Funcionario> {
 
                 if ("Cozinha".equalsIgnoreCase(cargo)) {
                     funcionario = new Funcionario(
-                            rs.getInt("CodFuncionario"),
+                            rs.getString("CodFuncionario"),
                             rs.getString("Nome"),
                             rs.getString("Cpf")
                     );
                 } else if ("Entrega".equalsIgnoreCase(cargo)) {
                     funcionario = new Funcionario(
-                            rs.getInt("CodFuncionario"),
+                            rs.getString("CodFuncionario"),
                             rs.getString("Nome"),
                             rs.getString("Cpf")
                     );
@@ -76,13 +76,13 @@ public class RepoFuncionario implements IRepository<Funcionario> {
 
                     if ("Cozinha".equalsIgnoreCase(cargo)) {
                         funcionario = new Funcionario(
-                                rs.getInt("CodFuncionario"),
+                                rs.getString("CodFuncionario"),
                                 rs.getString("Nome"),
                                 rs.getString("Cpf")
                         );
                     } else if ("Entrega".equalsIgnoreCase(cargo)) {
                         funcionario = new Funcionario(
-                                rs.getInt("CodFuncionario"),
+                                rs.getString("CodFuncionario"),
                                 rs.getString("Nome"),
                                 rs.getString("Cpf")
                         );
