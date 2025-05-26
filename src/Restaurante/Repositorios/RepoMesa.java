@@ -27,8 +27,8 @@ public class RepoMesa {
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                Mesa mesa = new Mesa(rs.getInt("Capacidade"));
-                mesa.setIdMesa(rs.getInt("IdMesa"));
+                Mesa mesa = new Mesa(rs.getInt("CodMesa"),
+                        rs.getInt("Capacidade"));
                 mesas.add(mesa);
             }
         } catch (SQLException e) {
@@ -38,14 +38,13 @@ public class RepoMesa {
     }
 
     public Mesa buscarPorId(int idMesa) {
-        String sql = "SELECT * FROM Mesa WHERE IdMesa = ?";
+        String sql = "SELECT * FROM Mesa WHERE CodMesa = ?";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, idMesa);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    Mesa mesa = new Mesa(rs.getInt("Capacidade"));
-                    mesa.setIdMesa(rs.getInt("IdMesa"));
+                    Mesa mesa = new Mesa(rs.getInt("CodMesa"), rs.getInt("Capacidade"));
                     return mesa;
                 }
             }
@@ -56,7 +55,7 @@ public class RepoMesa {
     }
 
     public boolean atualizar(int idMesa, int novaCapacidade) {
-        String sql = "UPDATE Mesa SET Capacidade = ? WHERE IdMesa = ?";
+        String sql = "UPDATE Mesa SET Capacidade = ? WHERE CodMesa = ?";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, novaCapacidade);
@@ -69,7 +68,7 @@ public class RepoMesa {
     }
 
     public boolean remover(int idMesa) {
-        String sql = "DELETE FROM Mesa WHERE IdMesa = ?";
+        String sql = "DELETE FROM Mesa WHERE CodMesa = ?";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, idMesa);

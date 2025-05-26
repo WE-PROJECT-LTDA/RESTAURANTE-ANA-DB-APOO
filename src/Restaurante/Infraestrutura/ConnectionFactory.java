@@ -65,8 +65,8 @@ import java.sql.SQLException;
 public class ConnectionFactory {
 
     private static final String URL = "jdbc:mysql://134.65.244.176:3306/projeto_ana_restaurante_nascy?useSSL=false&serverTimezone=UTC";
-    private static final String USER = "Luizvenancio";    // ajuste seu usuário
-    private static final String PASSWORD = "OrthERoMetabyptYpE"; // ajuste sua senha
+    private static final String USER = "anascimento";
+    private static final String PASSWORD = "OrthERoMetabyptYpE";
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);

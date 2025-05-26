@@ -30,11 +30,11 @@ public class RepoProduto {
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 Produto produto = new Produto(
+                        rs.getInt("CodProduto"),
                         rs.getString("Nome"),
                         rs.getDouble("Preco"),
                         rs.getString("Descricao")
                 );
-                produto.setCodigo(rs.getInt("Codigo"));
                 produtos.add(produto);
             }
         } catch (SQLException e) {
@@ -44,18 +44,18 @@ public class RepoProduto {
     }
 
     public Produto buscarPorCodigo(int codigo) {
-        String sql = "SELECT * FROM Produto WHERE Codigo = ?";
+        String sql = "SELECT * FROM Produto WHERE CodProduto = ?";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, codigo);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     Produto produto = new Produto(
+                            rs.getInt("CodProduto"),
                             rs.getString("Nome"),
                             rs.getDouble("Preco"),
                             rs.getString("Descricao")
                     );
-                    produto.setCodigo(rs.getInt("Codigo"));
                     return produto;
                 }
             }
@@ -66,7 +66,7 @@ public class RepoProduto {
     }
 
     public boolean atualizar(int codigo, String novoNome, double novoPreco, String novaDescricao) {
-        String sql = "UPDATE Produto SET Nome = ?, Preco = ?, Descricao = ? WHERE Codigo = ?";
+        String sql = "UPDATE Produto SET Nome = ?, Preco = ?, Descricao = ? WHERE CodProduto = ?";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, novoNome);
@@ -81,7 +81,7 @@ public class RepoProduto {
     }
 
     public boolean remover(int codigo) {
-        String sql = "DELETE FROM Produto WHERE Codigo = ?";
+        String sql = "DELETE FROM Produto WHERE CodProduto = ?";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, codigo);
@@ -90,19 +90,5 @@ public class RepoProduto {
             e.printStackTrace();
             return false;
         }
-    }
-
-
-    public void inicializarProdutos() {
-        adicionar(new Produto("Pizza Margherita", 35.00, "Pizza com molho de tomate e queijo"));
-        adicionar(new Produto("Coxinha", 8.50, "Coxinha de frango desfiado"));
-        adicionar(new Produto("Refrigerante", 5.00, "Refrigerante de cola"));
-        adicionar(new Produto("Hambúrguer", 25.00, "Hambúrguer com queijo e bacon"));
-        adicionar(new Produto("Batata Frita", 12.00, "Porção de batata frita crocante"));
-        adicionar(new Produto("Salada Caesar", 18.50, "Salada com frango grelhado e molho Caesar"));
-        adicionar(new Produto("Suco Natural", 7.00, "Suco de laranja natural"));
-        adicionar(new Produto("Lasanha", 40.00, "Lasanha de carne com queijo"));
-        adicionar(new Produto("Espaguete", 30.00, "Espaguete ao molho de tomate"));
-        adicionar(new Produto("Sorvete", 10.00, "Sorvete de creme com calda de chocolate"));
     }
 }

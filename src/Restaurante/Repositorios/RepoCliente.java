@@ -136,11 +136,11 @@ public class RepoCliente {
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 Cliente cliente = new Cliente(
+                        rs.getInt("CodCliente"),
                         rs.getString("Nome"),
                         rs.getString("Telefone"),
                         rs.getString("Email")
                 );
-                cliente.setId(rs.getInt("CodCliente"));
                 clientes.add(cliente);
             }
         } catch (SQLException e) {
@@ -157,11 +157,11 @@ public class RepoCliente {
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     Cliente cliente = new Cliente(
+                            rs.getInt("CodCliente"),
                             rs.getString("Nome"),
                             rs.getString("Telefone"),
                             rs.getString("Email")
                     );
-                    cliente.setId(rs.getInt("CodCliente"));
                     return cliente;
                 }
             }

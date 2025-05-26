@@ -1,6 +1,8 @@
 package Restaurante.Repositorios;
 
 import Restaurante.Entidades.Funcionario;
+import Restaurante.Entidades.Heranças.Cozinheiro;
+import Restaurante.Entidades.Heranças.Garcom;
 import Restaurante.Infraestrutura.ConnectionFactory;
 
 import java.sql.*;
@@ -8,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RepoFuncionario {
+    List<Funcionario> funcionarios = new ArrayList<>();
 
     public void adicionar(Funcionario funcionario) {
         String sql = "INSERT INTO Funcionario (Nome, Cargo, Cpf) VALUES (?, ?, ?)";
@@ -23,19 +26,34 @@ public class RepoFuncionario {
     }
 
     public List<Funcionario> listar() {
-        List<Funcionario> funcionarios = new ArrayList<>();
         String sql = "SELECT * FROM Funcionario";
         try (Connection conn = ConnectionFactory.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                Funcionario funcionario = new Funcionario(
-                        rs.getString("Nome"),
-                        rs.getString("Cargo"),
-                        rs.getString("Cpf")
-                );
-                funcionario.setId(rs.getInt("IdFuncionario"));
-                funcionarios.add(funcionario);
+                String cargo = rs.getString("Cargo");
+                Funcionario funcionario;
+
+                if ("Cozinha".equalsIgnoreCase(cargo)) {
+                    funcionario = new Cozinheiro(
+                            rs.getInt("CodFuncionario"),
+                            rs.getString("Nome"),
+                            rs.getString("Cpf")
+                    );
+                } else if ("Entrega".equalsIgnoreCase(cargo)) {
+                    funcionario = new Garcom(
+                            rs.getInt("CodFuncionario"),
+                            rs.getString("Nome"),
+                            rs.getString("Cpf")
+                    );
+                } else {
+                    // fallback para outro tipo se necessário ou lançar exceção
+                    funcionario = null;
+                }
+
+                if (funcionario != null) {
+                    funcionarios.add(funcionario);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -50,12 +68,29 @@ public class RepoFuncionario {
             pstmt.setInt(1, id);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    Funcionario funcionario = new Funcionario(
-                            rs.getString("Nome"),
-                            rs.getString("Cargo"),
-                            rs.getString("Cpf")
-                    );
-                    funcionario.setId(rs.getInt("IdFuncionario"));
+                    String cargo = rs.getString("Cargo");
+                    Funcionario funcionario;
+
+                    if ("Cozinha".equalsIgnoreCase(cargo)) {
+                        funcionario = new Cozinheiro(
+                                rs.getInt("CodFuncionario"),
+                                rs.getString("Nome"),
+                                rs.getString("Cpf")
+                        );
+                    } else if ("Entrega".equalsIgnoreCase(cargo)) {
+                        funcionario = new Garcom(
+                                rs.getInt("CodFuncionario"),
+                                rs.getString("Nome"),
+                                rs.getString("Cpf")
+                        );
+                    } else {
+                        // fallback para outro tipo se necessário ou lançar exceção
+                        funcionario = null;
+                    }
+
+                    if (funcionario != null) {
+                        funcionarios.add(funcionario);
+                    }
                     return funcionario;
                 }
             }

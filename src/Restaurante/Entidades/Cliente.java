@@ -4,14 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cliente {
-    private static int contador = 0;
     private int id;
     private String nome;
     private String telefone;
     private String email;
 
+    public Cliente(int id, String nome, String telefone, String email) {
+        this.id = id;
+        this.nome = nome;
+        this.telefone = telefone;
+        this.email = email;
+    }
+
     public Cliente(String nome, String telefone, String email) {
-        this.id = ++contador;
         this.nome = nome;
         this.telefone = telefone;
         this.email = email;
@@ -45,11 +50,16 @@ public class Cliente {
         this.email = email;
     }
 
-    @Override
-    public String toString() {
-        return null;
+    public void setId(int codCliente) {
+        this.id = codCliente;
     }
 
-    public void setId(int codCliente) {
+    @Override
+    public String toString() {
+        return "\n=== Cliente ===" +
+                "\nID       : " + id +
+                "\nNome     : " + nome +
+                "\nTelefone : " + telefone +
+                "\nEmail    : " + email;
     }
 }

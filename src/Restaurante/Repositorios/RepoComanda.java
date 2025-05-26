@@ -10,12 +10,11 @@ import java.util.List;
 public class RepoComanda {
 
     public void adicionar(Comanda comanda) {
-        String sql = "INSERT INTO Comanda (IdCliente, IdMesa, Descricao, Valor) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Comanda (CodCliente, CodMesa, Valor) VALUES (?, ?, ?, ?)";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, comanda.getIdCliente());
             pstmt.setInt(2, comanda.getIdMesa());
-            pstmt.setString(3, comanda.getDescricao());
             pstmt.setDouble(4, comanda.getValor());
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -31,12 +30,11 @@ public class RepoComanda {
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 Comanda comanda = new Comanda(
-                        rs.getInt("IdCliente"),
-                        rs.getString("Descricao"),
-                        rs.getInt("IdMesa"),
+                        rs.getInt("CodComanda"),
+                        rs.getInt("CodCliente"),
+                        rs.getInt("CodMesa"),
                         rs.getDouble("Valor")
                 );
-                comanda.setId(rs.getInt("IdComanda"));
                 comandas.add(comanda);
             }
         } catch (SQLException e) {
@@ -53,12 +51,11 @@ public class RepoComanda {
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     Comanda comanda = new Comanda(
-                            rs.getInt("IdCliente"),
-                            rs.getString("Descricao"),
-                            rs.getInt("IdMesa"),
+                            rs.getInt("CodComanda"),
+                            rs.getInt("CodCliente"),
+                            rs.getInt("CodMesa"),
                             rs.getDouble("Valor")
                     );
-                    comanda.setId(rs.getInt("IdComanda"));
                     return comanda;
                 }
             }
@@ -68,13 +65,12 @@ public class RepoComanda {
         return null;
     }
 
-    public boolean atualizar(int id, int novoIdCliente, String novaComanda, int novoIdMesa, String novaDescricao, double novoValor) {
-        String sql = "UPDATE Comanda SET IdCliente = ?, IdMesa = ?, Descricao = ?, Valor = ? WHERE IdComanda = ?";
+    public boolean atualizar(int id, int novoIdCliente, int novoIdMesa, double novoValor) {
+        String sql = "UPDATE Comanda SET IdCliente = ?, IdMesa = ?, Valor = ? WHERE IdComanda = ?";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, novoIdCliente);
             pstmt.setInt(2, novoIdMesa);
-            pstmt.setString(3, novaDescricao);
             pstmt.setDouble(4, novoValor);
             pstmt.setInt(5, id);
             return pstmt.executeUpdate() > 0;
