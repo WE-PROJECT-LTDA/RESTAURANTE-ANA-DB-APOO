@@ -10,12 +10,12 @@ import java.util.List;
 public class RepoComanda {
 
     public void adicionar(Comanda comanda) {
-        String sql = "INSERT INTO Comanda (CodCliente, CodMesa, Valor) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Comanda (CodCliente, CodMesa, Valor) VALUES (?, ?, ?)";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, comanda.getIdCliente());
             pstmt.setInt(2, comanda.getIdMesa());
-            pstmt.setDouble(4, comanda.getValor());
+            pstmt.setDouble(3, comanda.getValor());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

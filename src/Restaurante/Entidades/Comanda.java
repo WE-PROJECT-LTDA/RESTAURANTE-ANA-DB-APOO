@@ -19,7 +19,10 @@ public class Comanda {
           this.valor = valor;
      }
 
-     public int getId() {
+    public Comanda(int id, String s, int idMesa, String pedidosDoCliente, double v) {
+    }
+
+    public int getId() {
           return id;
      }
 
